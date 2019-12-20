@@ -11,12 +11,13 @@ from PIL import Image
 import torch
 from torch.optim import SGD
 from torchvision import models
+import flask
 
 from misc_functions import preprocess_image, recreate_image, save_image
 
 app = flask.Flask(__name__)
 
-port = int(os.getenv("PORT"))
+#port = int(os.getenv("PORT"))
 
 
 class DeepDream():
@@ -49,10 +50,14 @@ class DeepDream():
     def dream(self):
         # Process image and return variable
         self.processed_image = preprocess_image(self.created_image, True)
+        plt.rcParams['figure.figsize'] = [24.0, 14.0]
+        
         # Define optimizer for the image
         # Earlier layers need higher learning rates to visualize whereas layer layers need less
         optimizer = SGD([self.processed_image], lr=12,  weight_decay=1e-4)
-        for i in range(1, 251):
+        # Create a figure and plot the image
+        fig, pl = plt.subplots(1, 1)
+        for i in range(1, 10):
             optimizer.zero_grad()
             # Assign create image to a variable to move forward in the model
             x = self.processed_image
@@ -78,7 +83,10 @@ class DeepDream():
                 im_path = 'generated/ddream_l' + str(self.selected_layer) + \
                     '_f' + str(self.selected_filter) + '_iter' + str(i) + '.jpg'
                 save_image(self.created_image, im_path)
+        plt.savefig('output.jpg')
+        return send_file('output.jpg', mimetype='image/jpg')
 
+@app.route('/main', methods=['POST'])
 def main():
     if flask.request.method == "POST":
         if flask.request.files.get("image"):
@@ -93,8 +101,11 @@ def main():
     # This operation can also be done without Pytorch hooks
     # See layer visualisation for the implementation without hooks
     dd.dream()
+    return flask.jsonify({'class_name': class_name})
+    
 
-@app.route('/main', methods=['POST'])
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8001)
+    
+
     
