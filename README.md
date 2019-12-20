@@ -50,7 +50,7 @@
 * NodePort:                 <unset>  30301/TCP
 
 # Pass the image using curl from the folder where test image is saved using the ip got by above command
-* curl -X POST -F image=@spider.png "http://172.21.103.85:30301/"
+* curl -X POST -F image=@spider.png "http://172.30.198.144:30301/"
 * Output is shown on the terminal.
 * Image will be saved in the same folder from which curl command was run and where the input image exists.
 
