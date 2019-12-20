@@ -1,0 +1,10 @@
+flask
+torch
+torchvision
+matplotlib
+scikit-image
+pillow
+blend-modes
+numpy
+ibm-cos-sdk
+opencv-python
