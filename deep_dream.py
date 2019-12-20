@@ -3,6 +3,7 @@
 # Cloud for ML Final Project
 # Divya Juneja
 # deep_dream.py
+@author: Utku Ozbulak - github.com/utkuozbulak
 #
 """
 import os
